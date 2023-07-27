@@ -4,14 +4,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { DbService } from 'src/db/db/db.service';
 import { IUser } from 'src/db/db/db.types';
 import { v4 } from 'uuid';
-import { getUserWithoutPassword } from './helpers/getUserWithoutPassword';
-import { UserWithoutPassword } from './types/user.interface';
 
 @Injectable()
 export class UserService {
   constructor(private db: DbService) {}
 
-  create(createUserDto: CreateUserDto): UserWithoutPassword {
+  create(createUserDto: CreateUserDto): IUser {
     const newUser: IUser = {
       id: v4(),
       login: createUserDto.login,
@@ -23,22 +21,22 @@ export class UserService {
 
     this.db.users.push(newUser);
 
-    return getUserWithoutPassword(newUser);
+    return newUser;
   }
 
-  findAll() {
-    return this.db.users.map((newUser) => getUserWithoutPassword(newUser));
+  findAll(): IUser[] {
+    return this.db.users;
   }
 
-  findOne(id: string): UserWithoutPassword {
+  findOne(id: string): IUser {
     const user = this.db.users.find((user) => user.id === id);
     if (!user) {
       throw new HttpException('User not exist', 404);
     }
-    return getUserWithoutPassword(user);
+    return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto): UserWithoutPassword {
+  update(id: string, updateUserDto: UpdateUserDto): IUser {
     const user = this.db.users.find((user) => user.id === id);
     if (!user) {
       throw new HttpException('User not exist', 404);
@@ -52,7 +50,8 @@ export class UserService {
     user.updatedAt = new Date().getTime();
     user.password = updateUserDto.newPassword;
 
-    return getUserWithoutPassword(user);
+    console.log(updateUserDto, user);
+    return user;
   }
 
   remove(id: string) {
