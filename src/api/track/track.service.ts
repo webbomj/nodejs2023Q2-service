@@ -52,7 +52,7 @@ export class TrackService {
   remove(id: string) {
     const track = this.db.tracks.find((track) => track.id === id);
     if (!track) {
-      throw new HttpException('User not exist', 404);
+      throw new HttpException('Track not exist', 404);
     }
 
     this.db.tracks = this.db.tracks.filter((track) => track.id !== id);
