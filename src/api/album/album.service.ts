@@ -52,6 +52,20 @@ export class AlbumService {
       throw new HttpException('Album not exist', 404);
     }
 
+    this.db.tracks = this.db.tracks.map((track) => {
+      if (track.albumId === id) {
+        return {
+          ...track,
+          albumId: null,
+        };
+      }
+      return track;
+    });
+
+    this.db.favorites.albums = this.db.favorites.albums.filter(
+      (album) => album.id !== id,
+    );
+
     this.db.albums = this.db.albums.filter((track) => track.id !== id);
     return;
   }

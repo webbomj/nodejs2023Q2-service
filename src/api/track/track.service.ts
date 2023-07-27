@@ -55,6 +55,10 @@ export class TrackService {
       throw new HttpException('Track not exist', 404);
     }
 
+    this.db.favorites.tracks = this.db.favorites.tracks.filter(
+      (track) => track.id !== id,
+    );
+
     this.db.tracks = this.db.tracks.filter((track) => track.id !== id);
     return;
   }

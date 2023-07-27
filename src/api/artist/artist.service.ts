@@ -48,6 +48,31 @@ export class ArtistService {
     if (!artist) {
       throw new HttpException('Artist not exist', 404);
     }
+
+    this.db.albums = this.db.albums.map((album) => {
+      if (album.artistId === id) {
+        return {
+          ...album,
+          artistId: null,
+        };
+      }
+      return album;
+    });
+
+    this.db.tracks = this.db.tracks.map((track) => {
+      if (track.artistId === id) {
+        return {
+          ...track,
+          artistId: null,
+        };
+      }
+      return track;
+    });
+
+    this.db.favorites.artists = this.db.favorites.artists.filter(
+      (artist) => artist.id !== id,
+    );
+
     this.db.artists = this.db.artists.filter((artist) => artist.id !== id);
     return;
   }
