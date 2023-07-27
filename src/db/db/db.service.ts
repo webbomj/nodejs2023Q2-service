@@ -8,5 +8,9 @@ export class DbService {
   tracks: ITrack[] = [];
   artists: IArtist[] = [];
   albums: IAlbum[] = [];
-  favorites: IFavorite[] = [];
+  favorites: IFavorite = {
+    artists: [],
+    albums: [],
+    tracks: [],
+  };
 }
