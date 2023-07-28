@@ -50,7 +50,6 @@ export class UserService {
     user.updatedAt = new Date().getTime();
     user.password = updateUserDto.newPassword;
 
-    console.log(updateUserDto, user);
     return user;
   }
 

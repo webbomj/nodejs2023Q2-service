@@ -3,10 +3,18 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { DbService } from 'src/db/db/db.service';
 import { v4 } from 'uuid';
 import { IArtist } from 'src/db/db/db.types';
+import { FavsService } from '../favs/favs.service';
+import { TrackService } from '../track/track.service';
+import { AlbumService } from '../album/album.service';
 
 @Injectable()
 export class ArtistService {
-  constructor(private db: DbService) {}
+  constructor(
+    private db: DbService,
+    private favService: FavsService,
+    private trackService: TrackService,
+    private albumService: AlbumService,
+  ) {}
 
   create(createArtistDto: CreateArtistDto): IArtist {
     const newArtist = {
@@ -49,29 +57,13 @@ export class ArtistService {
       throw new HttpException('Artist not exist', 404);
     }
 
-    this.db.albums = this.db.albums.map((album) => {
-      if (album.artistId === id) {
-        return {
-          ...album,
-          artistId: null,
-        };
-      }
-      return album;
-    });
+    this.albumService.removeArtistId(id);
 
-    this.db.tracks = this.db.tracks.map((track) => {
-      if (track.artistId === id) {
-        return {
-          ...track,
-          artistId: null,
-        };
-      }
-      return track;
-    });
+    this.trackService.removeArtistId(id);
 
-    this.db.favorites.artists = this.db.favorites.artists.filter(
-      (artist) => artist.id !== id,
-    );
+    try {
+      this.favService.removeArtist(id);
+    } catch (e) {}
 
     this.db.artists = this.db.artists.filter((artist) => artist.id !== id);
     return;

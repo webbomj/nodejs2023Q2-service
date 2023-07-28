@@ -4,10 +4,14 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 import { DbService } from 'src/db/db/db.service';
 import { ITrack } from 'src/db/db/db.types';
 import { v4 } from 'uuid';
+import { FavsService } from '../favs/favs.service';
 
 @Injectable()
 export class TrackService {
-  constructor(private db: DbService) {}
+  constructor(
+    private db: DbService,
+    private favService: FavsService,
+  ) {}
 
   create(createTrackDto: CreateTrackDto) {
     const newTrack: ITrack = {
@@ -55,11 +59,35 @@ export class TrackService {
       throw new HttpException('Track not exist', 404);
     }
 
-    this.db.favorites.tracks = this.db.favorites.tracks.filter(
-      (track) => track.id !== id,
-    );
+    try {
+      this.favService.removeTrack(id);
+    } catch (e) {}
 
     this.db.tracks = this.db.tracks.filter((track) => track.id !== id);
     return;
+  }
+
+  removeAlbumId(id: string) {
+    this.db.tracks = this.db.tracks.map((track) => {
+      if (track.albumId === id) {
+        return {
+          ...track,
+          albumId: null,
+        };
+      }
+      return track;
+    });
+  }
+
+  removeArtistId(id: string) {
+    this.db.tracks = this.db.tracks.map((track) => {
+      if (track.artistId === id) {
+        return {
+          ...track,
+          artistId: null,
+        };
+      }
+      return track;
+    });
   }
 }
