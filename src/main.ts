@@ -15,7 +15,7 @@ async function bootstrap() {
   const dockFilePath = path.join(__dirname, '../', '/doc', 'api.yaml');
   const doc = await fs.readFile(dockFilePath, 'utf8');
 
-  SwaggerModule.setup('', app, load(doc) as OpenAPIObject);
+  SwaggerModule.setup('/doc', app, load(doc) as OpenAPIObject);
 
   await app.listen(PORT);
 }
