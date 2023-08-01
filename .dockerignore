@@ -1,0 +1,7 @@
+README.md
+.prettierrc
+.eslintrc.js
+.env.example
+/coverage
+/.vscode
+/doc
