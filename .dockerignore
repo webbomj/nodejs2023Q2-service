@@ -1,7 +1,11 @@
 README.md
 .prettierrc
 .eslintrc.js
-.env.example
-/coverage
-/.vscode
-/doc
+.vscode
+coverage
+dist
+node_modules
+Dockerfile
+.git
+.gitignore
+docker

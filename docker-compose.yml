@@ -1,0 +1,46 @@
+version: "0.0.1"
+services:
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    environment: 
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: always
+    env_file:
+      - .env 
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+       - dbtuto:/data/postgres-tuto
+    links:
+      - app
+    networks:
+      - postgres  
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    environment: 
+      PORT: ${PORT}
+    networks:
+      - postgres
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - postgres  
+
+volumes:
+    dbtuto:
+      external: true
+
+networks:
+  postgres:
+    driver: bridge
