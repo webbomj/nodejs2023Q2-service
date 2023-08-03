@@ -87,9 +87,9 @@ export class ArtistService {
 
     await this.findOne(id);
 
-    // this.albumService.removeArtistId(id);
+    await this.albumService.removeArtistId(id);
 
-    // this.trackService.removeArtistId(id);
+    await this.trackService.removeArtistId(id);
 
     // try {
     //   this.favService.removeArtist(id);
@@ -97,7 +97,7 @@ export class ArtistService {
 
     // this.db.artists = this.db.artists.filter((artist) => artist.id !== id);
 
-    this.prisma.artist.delete({
+    await this.prisma.artist.delete({
       where: { id },
     });
     return;

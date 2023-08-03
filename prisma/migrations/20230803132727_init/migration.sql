@@ -23,8 +23,8 @@ CREATE TABLE "Artist" (
 CREATE TABLE "Track" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "artistId" UUID NOT NULL,
-    "albumId" UUID NOT NULL,
+    "artistId" TEXT,
+    "albumId" TEXT,
     "duration" INTEGER NOT NULL,
 
     CONSTRAINT "Track_pkey" PRIMARY KEY ("id")
@@ -49,9 +49,3 @@ CREATE TABLE "FavoritesArtist" (
 
     CONSTRAINT "FavoritesArtist_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "Track_artistId_key" ON "Track"("artistId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Track_albumId_key" ON "Track"("albumId");

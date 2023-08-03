@@ -7,43 +7,43 @@ export class FavsController {
   constructor(private readonly favsService: FavsService) {}
 
   @Get()
-  findAll() {
-    return this.favsService.findAll();
+  async findAll() {
+    return await this.favsService.findAll();
   }
 
   @Post('/track/:id')
   @HttpCode(201)
-  createTrack(@Param() params: FindOneParams) {
-    return this.favsService.addTrack(params.id);
+  async createTrack(@Param() params: FindOneParams) {
+    return await this.favsService.addTrack(params.id);
   }
 
   @Delete('/track/:id')
   @HttpCode(204)
-  removeTrack(@Param() params: FindOneParams) {
-    return this.favsService.removeTrack(params.id);
+  async removeTrack(@Param() params: FindOneParams) {
+    return await this.favsService.removeTrack(params.id);
   }
 
   @Post('/album/:id')
   @HttpCode(201)
-  createAlbum(@Param() params: FindOneParams) {
-    return this.favsService.addAlbum(params.id);
+  async createAlbum(@Param() params: FindOneParams) {
+    return await this.favsService.addAlbum(params.id);
   }
 
   @Delete('/album/:id')
   @HttpCode(204)
-  removeAlbum(@Param() params: FindOneParams) {
-    return this.favsService.removeAlbum(params.id);
+  async removeAlbum(@Param() params: FindOneParams) {
+    return await this.favsService.removeAlbum(params.id);
   }
 
   @Post('/artist/:id')
   @HttpCode(201)
-  createArtist(@Param() params: FindOneParams) {
-    return this.favsService.addArtist(params.id);
+  async createArtist(@Param() params: FindOneParams) {
+    return await this.favsService.addArtist(params.id);
   }
 
   @Delete('/artist/:id')
   @HttpCode(204)
-  removeArtist(@Param() params: FindOneParams) {
-    return this.favsService.removeArtist(params.id);
+  async removeArtist(@Param() params: FindOneParams) {
+    return await this.favsService.removeArtist(params.id);
   }
 }

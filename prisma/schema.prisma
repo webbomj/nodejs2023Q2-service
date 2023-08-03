@@ -28,8 +28,8 @@ model Artist {
 model Track {
   id       String @id @default(uuid())
   name     String
-  artistId String @unique @db.Uuid
-  albumId  String @unique @db.Uuid
+  artistId String? 
+  albumId  String?
   duration Int
 }
 

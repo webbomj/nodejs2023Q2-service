@@ -98,10 +98,10 @@ export class AlbumService {
 
     await this.findOne(id);
 
-    // this.trackService.removeAlbumId(id);
+    await this.trackService.removeAlbumId(id);
 
     // try {
-    //   this.favService.removeAlbum(id);
+    //   await this.favService.removeAlbum(id);
     // } catch (e) {}
 
     // this.db.albums = this.db.albums.filter((track) => track.id !== id);
@@ -114,7 +114,7 @@ export class AlbumService {
     return;
   }
 
-  removeArtistId(id: string) {
+  async removeArtistId(id: string) {
     // this.db.albums = this.db.albums.map((album) => {
     //   if (album.artistId === id) {
     //     return {
@@ -125,8 +125,8 @@ export class AlbumService {
     //   return album;
     // });
 
-    this.prisma.album.update({
-      where: { id },
+    await this.prisma.album.updateMany({
+      where: { artistId: id },
       data: {
         artistId: null,
       },
