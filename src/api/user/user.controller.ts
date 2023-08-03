@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpCode,
+  HttpException,
 } from '@nestjs/common';
 import { ClassSerializerInterceptor } from '@nestjs/common/serializer';
 import { UseInterceptors } from '@nestjs/common/decorators';
@@ -23,31 +24,44 @@ export class UserController {
 
   @Post()
   @HttpCode(201)
-  create(@Body() createUserDto: CreateUserDto): UserEntity {
-    return new UserEntity(this.userService.create(createUserDto));
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    const user = await this.userService.create(createUserDto);
+    return new UserEntity(user);
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll().map((user) => new UserEntity(user));
+  async findAll(): Promise<UserEntity[]> {
+    try {
+      const user = await this.userService.findAll();
+      const returnUser = user.map((user) => new UserEntity(user));
+      return returnUser;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   @Get(':id')
-  findOne(@Param() params: FindOneParams): UserEntity {
-    return new UserEntity(this.userService.findOne(params.id));
+  async findOne(@Param() params: FindOneParams): Promise<UserEntity> {
+    const user = await this.userService.findOne(params.id);
+    return new UserEntity(user);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param() params: FindOneParams,
     @Body() updateUserDto: UpdateUserDto,
-  ): UserEntity {
-    return new UserEntity(this.userService.update(params.id, updateUserDto));
+  ): Promise<UserEntity> {
+    const user = await this.userService.update(params.id, updateUserDto);
+    return new UserEntity(user);
   }
 
   @Delete(':id')
   @HttpCode(204)
   remove(@Param() params: FindOneParams) {
-    return this.userService.remove(params.id);
+    try {
+      return this.userService.remove(params.id);
+    } catch (error) {
+      throw new HttpException('User not exist', 404);
+    }
   }
 }
