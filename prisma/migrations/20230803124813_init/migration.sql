@@ -4,8 +4,8 @@ CREATE TABLE "User" (
     "login" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "version" INTEGER NOT NULL,
-    "createdAt" INTEGER NOT NULL,
-    "updatedAt" INTEGER NOT NULL,
+    "createdAt" TEXT NOT NULL,
+    "updatedAt" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -35,7 +35,7 @@ CREATE TABLE "Album" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "year" INTEGER NOT NULL,
-    "artistId" UUID NOT NULL,
+    "artistId" TEXT,
 
     CONSTRAINT "Album_pkey" PRIMARY KEY ("id")
 );
@@ -55,6 +55,3 @@ CREATE UNIQUE INDEX "Track_artistId_key" ON "Track"("artistId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Track_albumId_key" ON "Track"("albumId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Album_artistId_key" ON "Album"("artistId");

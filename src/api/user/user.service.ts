@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DbService } from 'src/db/db/db.service';
 import { IDBUser } from 'src/db/db/db.types';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/db/db/prisma.service';
 
 @Injectable()
 export class UserService {

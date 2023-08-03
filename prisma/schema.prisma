@@ -37,9 +37,7 @@ model Album {
   id       String @id @default(uuid())
   name     String
   year     Int
-  artistId String @unique @db.Uuid
-
-  // album    Album  @relation(fields: [artistId], references: [id])
+  artistId String?
 }
 
 model FavoritesArtist {

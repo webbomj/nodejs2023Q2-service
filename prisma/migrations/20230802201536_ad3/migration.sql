@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ALTER COLUMN "createdAt" SET DATA TYPE TEXT,
-ALTER COLUMN "updatedAt" SET DATA TYPE TEXT;

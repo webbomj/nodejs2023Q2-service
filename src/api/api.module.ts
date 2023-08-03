@@ -7,5 +7,6 @@ import { FavsModule } from './favs/favs.module';
 
 @Module({
   imports: [UserModule, TrackModule, ArtistModule, AlbumModule, FavsModule],
+  providers: [],
 })
 export class ApiModule {}
