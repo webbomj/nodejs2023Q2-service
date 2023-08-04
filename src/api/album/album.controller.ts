@@ -25,8 +25,7 @@ export class AlbumController {
 
   @Get()
   async findAll() {
-    // return await this.albumService.findAll();
-    return { vasa: [] };
+    return await this.albumService.findAll();
   }
 
   @Get(':id')
