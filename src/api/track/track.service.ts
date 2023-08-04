@@ -2,14 +2,12 @@ import { Injectable, HttpException } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { DbService } from 'src/db/db/db.service';
-import { FavsService } from '../favs/favs.service';
 import { PrismaService } from 'src/db/db/prisma.service';
 
 @Injectable()
 export class TrackService {
   constructor(
     private db: DbService,
-    private favService: FavsService,
     private prisma: PrismaService,
   ) {}
 

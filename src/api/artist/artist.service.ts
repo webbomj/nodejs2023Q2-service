@@ -2,7 +2,6 @@ import { Injectable, HttpException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { DbService } from 'src/db/db/db.service';
 import { IArtist } from 'src/db/db/db.types';
-import { FavsService } from '../favs/favs.service';
 import { TrackService } from '../track/track.service';
 import { AlbumService } from '../album/album.service';
 import { PrismaService } from 'src/db/db/prisma.service';
@@ -11,7 +10,6 @@ import { PrismaService } from 'src/db/db/prisma.service';
 export class ArtistService {
   constructor(
     private db: DbService,
-    private favService: FavsService,
     private trackService: TrackService,
     private albumService: AlbumService,
     private prisma: PrismaService,

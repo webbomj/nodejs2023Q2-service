@@ -41,11 +41,20 @@ CREATE TABLE "Album" (
 );
 
 -- CreateTable
-CREATE TABLE "FavoritesArtist" (
-    "id" SERIAL NOT NULL,
-    "artists" TEXT[],
+CREATE TABLE "Favorite" (
+    "id" INTEGER NOT NULL DEFAULT 1,
     "albums" TEXT[],
+    "artists" TEXT[],
     "tracks" TEXT[],
 
-    CONSTRAINT "FavoritesArtist_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Favorite_pkey" PRIMARY KEY ("id")
 );
+
+-- AddForeignKey
+ALTER TABLE "Track" ADD CONSTRAINT "Track_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Track" ADD CONSTRAINT "Track_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Album" ADD CONSTRAINT "Album_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE SET NULL ON UPDATE CASCADE;

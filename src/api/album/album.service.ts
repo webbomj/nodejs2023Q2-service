@@ -1,7 +1,6 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { DbService } from 'src/db/db/db.service';
-import { FavsService } from '../favs/favs.service';
 import { TrackService } from '../track/track.service';
 import { PrismaService } from 'src/db/db/prisma.service';
 
@@ -9,7 +8,6 @@ import { PrismaService } from 'src/db/db/prisma.service';
 export class AlbumService {
   constructor(
     private db: DbService,
-    private favService: FavsService,
     private trackService: TrackService,
     private prisma: PrismaService,
   ) {}
