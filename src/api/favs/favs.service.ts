@@ -1,80 +1,159 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { DbService } from 'src/db/db/db.service';
+import { IAlbum, IArtist, ITrack } from 'src/db/db/db.types';
+import { PrismaService } from 'src/db/db/prisma.service';
+import { createFavorite } from './helpers/createFavorite';
+import { FAVORITES_ID } from './constant/constants';
 
 @Injectable()
 export class FavsService {
-  constructor(private db: DbService) {}
+  constructor(
+    private db: DbService,
+    private prisma: PrismaService,
+  ) {}
 
-  findAll() {
-    return this.db.favorites;
+  async findAll() {
+    const favorites = await this.prisma.favorite.findFirst({});
+
+    const artists: IArtist[] = await this.prisma.artist.findMany({
+      where: {
+        id: {
+          in: favorites.artists,
+        },
+      },
+    });
+    const albums: IAlbum[] = await this.prisma.album.findMany({
+      where: {
+        id: {
+          in: favorites.albums,
+        },
+      },
+    });
+    const tracks: ITrack[] = await this.prisma.track.findMany({
+      where: {
+        id: {
+          in: favorites.tracks,
+        },
+      },
+    });
+    const favorite = await createFavorite(artists, albums, tracks);
+    return favorite;
   }
 
-  addTrack(id: string) {
-    const track = this.db.tracks.find((track) => track.id === id);
+  async addTrack(id: string) {
+    const track = await this.prisma.track.findUnique({ where: { id } });
     if (!track) {
       throw new HttpException('Track with id doesn`t exist', 422);
     }
 
-    this.db.favorites.tracks.push(track);
+    await this.prisma.favorite.update({
+      where: { id: FAVORITES_ID },
+      data: {
+        tracks: {
+          push: id,
+        },
+      },
+    });
 
     return;
   }
 
-  removeTrack(id: string) {
-    const track = this.db.favorites.tracks.find((track) => track.id === id);
-    if (!track) {
-      throw new HttpException('Track not exist', 404);
-    }
+  async removeTrack(id: string) {
+    const favorite = await this.prisma.favorite.findFirst({
+      where: { id: FAVORITES_ID },
+    });
 
-    this.db.favorites.tracks = this.db.favorites.tracks.filter(
-      (track) => track.id !== id,
+    const favoriteWithotTrack = favorite.tracks.filter(
+      (trackId) => trackId !== id,
     );
+
+    await this.prisma.favorite.update({
+      where: { id: FAVORITES_ID },
+      data: {
+        tracks: {
+          set: [...favoriteWithotTrack],
+        },
+      },
+    });
+
     return;
   }
 
-  addAlbum(id: string) {
-    const album = this.db.albums.find((album) => album.id === id);
+  async addAlbum(id: string) {
+    const album = await this.prisma.album.findUnique({ where: { id } });
     if (!album) {
       throw new HttpException('Album with id doesn`t exist', 422);
     }
 
-    this.db.favorites.albums.push(album);
+    await this.prisma.favorite.update({
+      where: { id: FAVORITES_ID },
+      data: {
+        albums: {
+          push: id,
+        },
+      },
+    });
 
     return;
   }
 
-  removeAlbum(id: string) {
-    const album = this.db.favorites.albums.find((album) => album.id === id);
-    if (!album) {
-      throw new HttpException('Album not exist', 404);
-    }
+  async removeAlbum(id: string) {
+    const favorite = await this.prisma.favorite.findFirst({
+      where: { id: FAVORITES_ID },
+    });
 
-    this.db.favorites.albums = this.db.favorites.albums.filter(
-      (album) => album.id !== id,
+    const favoriteWithotAlbum = favorite.albums.filter(
+      (albumId) => albumId !== id,
     );
+
+    await this.prisma.favorite.update({
+      where: { id: FAVORITES_ID },
+      data: {
+        albums: {
+          set: [...favoriteWithotAlbum],
+        },
+      },
+    });
+
     return;
   }
 
-  addArtist(id: string) {
-    const artist = this.db.artists.find((artist) => artist.id === id);
+  async addArtist(id: string) {
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
     if (!artist) {
       throw new HttpException('Artist with id doesn`t exist', 422);
     }
 
-    this.db.favorites.artists.push(artist);
+    await this.prisma.favorite.update({
+      where: { id: FAVORITES_ID },
+      data: {
+        artists: {
+          push: id,
+        },
+      },
+    });
 
     return;
   }
 
-  removeArtist(id: string) {
-    const artist = this.db.favorites.artists.find((artist) => artist.id === id);
-    if (!artist) {
-      throw new HttpException('Artist not exist', 404);
-    }
+  async removeArtist(id: string) {
+    const favorite = await this.prisma.favorite.findFirst({
+      where: { id: FAVORITES_ID },
+    });
 
-    this.db.favorites.artists = this.db.favorites.artists.filter(
-      (artist) => artist.id !== id,
+    const favoriteWithotArtist = favorite.artists.filter(
+      (artistId) => artistId !== id,
     );
+
+    await this.prisma.favorite.update({
+      where: { id: FAVORITES_ID },
+      data: {
+        artists: {
+          set: [...favoriteWithotArtist],
+        },
+      },
+    });
+
     return;
   }
 }
