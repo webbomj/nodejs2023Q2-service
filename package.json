@@ -24,6 +24,7 @@
     "test:ar": "jest --testMatch \"<rootDir>/artists.e2e.spec.ts\" --config ./test/jest-e2e.json --noStackTrace --runInBand",
     "test:f": "jest --testMatch \"<rootDir>/favorites.e2e.spec.ts\" --config ./test/jest-e2e.json --noStackTrace --runInBand",
     "test:t": "jest --testMatch \"<rootDir>/tracks.e2e.spec.ts\" --config ./test/jest-e2e.json --noStackTrace --runInBand",
+    "docker:scout": "docker scout recommendations webbomj/library-task1",
     "start:prisma": "npx prisma migrate dev && npm run start:dev"
   },
   "dependencies": {

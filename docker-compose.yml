@@ -29,8 +29,6 @@ services:
     volumes:
             - ./:/app/
             - dbvol:/app/node_modules
-    links:
-      - postgres
     depends_on:
       - postgres
     networks:
@@ -41,4 +39,6 @@ volumes:
 
 networks:
   postgres:
+    name: custom_frontend
     driver: bridge
+    
