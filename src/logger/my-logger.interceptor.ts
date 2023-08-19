@@ -17,9 +17,6 @@ export class LoggingInterceptor implements NestInterceptor {
     const request = ctx.getRequest();
     const response = ctx.getRequest();
 
-    // console.log(request);
-    console.log(response);
-
     return next.handle().pipe(
       tap(() => {
         const message = `[${request.url}], query: ${JSON.stringify(
