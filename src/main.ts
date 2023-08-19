@@ -6,6 +6,7 @@ import { load } from 'js-yaml';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { MyLoggerService } from './logger/logger.service';
+import { HttpExceptionFilter } from './logger/my-exception.filter';
 
 const PORT = process.env.PORT || 4200;
 
@@ -13,7 +14,20 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-  app.useLogger(app.get(MyLoggerService));
+  const logger = app.get(MyLoggerService);
+  app.useLogger(logger);
+
+  process.on('uncaughtException', (error: Error) => {
+    const message = `Caught Exception: ${error}`;
+    logger.error(message);
+  });
+
+  process.on('unhandledRejection', (reason: unknown) => {
+    const message = `Handled Rejection: ${reason}`;
+    logger.error(message);
+  });
+
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
 
   const dockFilePath = path.join(__dirname, '../', '/doc', 'api.yaml');
   const doc = await fs.readFile(dockFilePath, 'utf8');
