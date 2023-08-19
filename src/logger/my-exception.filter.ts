@@ -7,17 +7,25 @@ import {
 import { Request, Response } from 'express';
 import { MyLoggerService } from './logger.service';
 
-@Catch(HttpException)
+@Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   constructor(public logger: MyLoggerService) {}
 
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
+    const status =
+      exception instanceof HttpException ? exception.getStatus() : 500;
 
-    const message = `${response.req.url}, ${response.req.query}, ${response.req.body}, ${response.req.statusCode}`;
+    const message =
+      exception instanceof HttpException
+        ? `[${request.url}], response: ${
+            typeof exception.getResponse() === 'object'
+              ? JSON.stringify(exception.getResponse())
+              : exception.getResponse()
+          } , status: ${status}`
+        : `Internal Server Error, status: ${status}`;
 
     this.logger.error(message);
 

@@ -7,12 +7,12 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { MyLoggerService } from './logger/logger.service';
 import { HttpExceptionFilter } from './logger/my-exception.filter';
+import { LoggingInterceptor } from './logger/my-logger.interceptor';
 
 const PORT = process.env.PORT || 4200;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const logger = app.get(MyLoggerService);
   app.useLogger(logger);
@@ -27,7 +27,9 @@ async function bootstrap() {
     logger.error(message);
   });
 
+  app.useGlobalInterceptors(new LoggingInterceptor(logger));
   app.useGlobalFilters(new HttpExceptionFilter(logger));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const dockFilePath = path.join(__dirname, '../', '/doc', 'api.yaml');
   const doc = await fs.readFile(dockFilePath, 'utf8');
