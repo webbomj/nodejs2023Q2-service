@@ -1,23 +1,16 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, Validate } from 'class-validator';
+import { isUUIDorNull } from 'src/api/album/validator/isUUIDorNull';
 
 export class CreateTrackDto {
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsOptional()
-  @IsUUID()
-  artistId?: string;
+  @Validate(isUUIDorNull)
+  artistId?: string | null;
 
-  @IsOptional()
-  @IsUUID()
-  albumId?: string;
+  @Validate(isUUIDorNull)
+  albumId?: string | null;
 
   @IsNumber()
   @IsNotEmpty()

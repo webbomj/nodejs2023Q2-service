@@ -3,8 +3,9 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUUID,
+  Validate,
 } from 'class-validator';
+import { isUUIDorNull } from 'src/api/album/validator/isUUIDorNull';
 
 export class UpdateTrackDto {
   @IsString()
@@ -12,12 +13,12 @@ export class UpdateTrackDto {
   name: string;
 
   @IsOptional()
-  @IsUUID()
-  artistId?: string;
+  @Validate(isUUIDorNull)
+  artistId?: string | null;
 
   @IsOptional()
-  @IsUUID()
-  albumId?: string;
+  @Validate(isUUIDorNull)
+  albumId?: string | null;
 
   @IsNumber()
   @IsNotEmpty()

@@ -1,0 +1,11 @@
+README.md
+.prettierrc
+.eslintrc.js
+.vscode
+coverage
+dist
+node_modules
+Dockerfile
+.git
+.gitignore
+docker
