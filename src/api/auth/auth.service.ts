@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { PrismaService } from 'src/db/db/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshDTO } from './dto/refresh.dto';
+import { secret } from './auth.module';
 
 @Injectable()
 export class AuthService {
@@ -40,8 +41,13 @@ export class AuthService {
     const payload = createLoginPayload(user.id, user.login);
 
     return {
-      access_token: await this.jwtService.signAsync(payload, {
-        expiresIn: '5m',
+      accessToken: await this.jwtService.signAsync(payload, {
+        expiresIn: '15m',
+        secret: secret,
+      }),
+      refresh_token: await this.jwtService.signAsync(payload, {
+        expiresIn: '1h',
+        secret: secret,
       }),
     };
   }

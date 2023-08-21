@@ -5,8 +5,10 @@ import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { DbModule } from 'src/db/db.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthGuard } from './guard/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
-const secret = process.env.SECRET || 'asdsad28sadtasd566asd65sad';
+export const secret = process.env.SECRET || 'Dasdasd1asdask3jkasdmmnasdj2';
 
 @Module({
   imports: [
@@ -19,6 +21,13 @@ const secret = process.env.SECRET || 'asdsad28sadtasd566asd65sad';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService],
+  providers: [
+    AuthService,
+    UserService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AuthModule {}
